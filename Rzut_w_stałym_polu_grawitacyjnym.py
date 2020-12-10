@@ -1,6 +1,31 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+def rzut1(h0,v0,a,theta):
+    H=h0
+    tc=(v0*np.sin((360-theta)*np.pi/180)-np.sqrt((v0**2*np.sin((360-theta)*np.pi/180)**2)+2*a*h0))/(-a)
+    z=v0*np.cos((360-theta)*np.pi/180)*tc
+    vx=v0*np.cos((360-theta)*np.pi/180)
+    vy=-a*tc-v0*np.sin((360-theta)*np.pi/180)
+    vk=np.sqrt(vx**2+vy**2)
+    tt=np.linspace(0,tc,1000)
+    yt=h0-v0*np.sin((360-theta)*np.pi/180)*tt-0.5*a*tt**2
+    vt=np.sqrt((v0*np.cos((360-theta)*np.pi/180))**2+((-a*tt)-v0*np.sin((360-theta)*np.pi/180))**2)
+    if theta!=270:
+        x=np.linspace(0,z,1000)
+        y=h0-np.tan((360-theta)*np.pi/180)*x-(a*x**2)/(2*v0**2*np.cos((360-theta)*np.pi/180)**2)
+def rzut2(h0,v0,a,theta):
+    H=h0+((v0**2)*(np.sin(theta*np.pi/180)**2))/(2*a)
+    tc=(v0*np.sin(theta*np.pi/180)/a)+np.sqrt(2*H/a)
+    z=v0*np.cos(theta*np.pi/180)*tc
+    vx=v0*np.cos((theta)*np.pi/180)
+    vy=v0*np.sin(theta*np.pi/180)-a*tc
+    vk=np.sqrt(vx**2+vy**2)
+    tt=np.linspace(0,tc,1000)
+    yt=h0+v0*np.sin(theta*np.pi/180)*tt-0.5*a*tt**2
+    vt=np.sqrt((v0*np.cos((theta)*np.pi/180))**2+(v0*np.sin(theta*np.pi/180)-a*tt)**2)
+    if theta!=90 or v0!=0:
+        x=np.linspace(0,z,1000)
+        y=h0+np.tan(theta*np.pi/180)*x-(a*(x**2))/(2*(v0**2)*(np.cos(theta*np.pi/180)**2))
 try:
     h0=float(input('Z jakiej wysokości wyrzucono ciało? '))
     while h0<0:
@@ -31,3 +56,7 @@ try:
         theta=90+theta
 except:
     print('Wartość kąta nachylenia powinna być liczbą.')
+if v0==0 or (theta>=0 and theta<=90):
+    rzut2(h0,v0,a,theta)
+elif theta>=270 and theta<360:
+    rzut1(h0,v0,a,theta)
